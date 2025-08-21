@@ -1,0 +1,311 @@
+{% include "layout.html" %} {% block content %}
+<h1 class="text-center" style="margin-top: 50px">Health Care Center</h1>
+<div
+  class="container mt-4 my-4"
+  style="background-color: #000; padding: 50px; border-radius: 15px"
+>
+  <form action="/predict" method="POST">
+    <div class="form-group">
+      <label for="symptoms" class="mb-4" style="color: white"
+        >Type Symptoms</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="symptoms"
+        name="symptoms"
+        placeholder="use symptoms like itching, vomiting, coughing....."
+        required
+      />
+    </div>
+    <button class="btn btn-danger mt-3 p-2 mb-2" style="width: 100%">
+      Recommendations
+    </button>
+  </form>
+</div>
+
+{% if predicted_disease %}
+<h1 class="text-center mt-4 my-4">Recommendations</h1>
+<div class="container">
+  <!-- Buttons to toggle display -->
+  <div class="result-container">
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#diseaseModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #f39334;
+        color: black;
+      "
+    >
+      Disease
+    </button>
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#descriptionModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #268af3;
+        color: black;
+      "
+    >
+      Description
+    </button>
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#precautionModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #f371f9;
+        color: black;
+      "
+    >
+      Precaution
+    </button>
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#medicationsModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #f8576f;
+        color: black;
+      "
+    >
+      Medications
+    </button>
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#workoutsModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #99f741;
+        color: black;
+      "
+    >
+      Workouts
+    </button>
+    <button
+      class="toggle-button"
+      data-bs-toggle="modal"
+      data-bs-target="#dietsModal"
+      style="
+        padding: 4px;
+        margin: 5px 50px 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 140px;
+        border-radius: 5px;
+        background: #e5e23d;
+        color: black;
+      "
+    >
+      Diets
+    </button>
+  </div>
+</div>
+{% endif %}
+<!-- Disease Modal -->
+<div
+  class="modal fade"
+  id="diseaseModal"
+  tabindex="-1"
+  aria-labelledby="diseaseModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <!-- Set header background color inline -->
+        <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" style="background-color: #modal-body-color">
+        <!-- Set modal body background color inline -->
+        <p>{{ predicted_disease }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Description Modal -->
+<div
+  class="modal fade"
+  id="descriptionModal"
+  tabindex="-1"
+  aria-labelledby="descriptionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ dis_des }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Precaution Modal -->
+<div
+  class="modal fade"
+  id="precautionModal"
+  tabindex="-1"
+  aria-labelledby="precautionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for i in my_precautions %}
+          <li>{{ i }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Medications Modal -->
+<div
+  class="modal fade"
+  id="medicationsModal"
+  tabindex="-1"
+  aria-labelledby="medicationsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for i in medications %}
+          <li>{{ i }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Workouts Modal -->
+<div
+  class="modal fade"
+  id="workoutsModal"
+  tabindex="-1"
+  aria-labelledby="workoutsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for i in workout %}
+          <li>{{ i }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Diets Modal -->
+<div
+  class="modal fade"
+  id="dietsModal"
+  tabindex="-1"
+  aria-labelledby="dietsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #020606; color: white">
+        <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for i in my_diet %}
+          <li>{{ i }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
