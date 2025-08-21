@@ -1,4 +1,6 @@
 Flask
-scikit-learn
 pickle
-sklearn
+scikit-learn
+pandas
+numpy
+streamlit
